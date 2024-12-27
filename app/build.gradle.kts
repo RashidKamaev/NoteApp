@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "com.example.noteapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.noteapp"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -37,6 +37,7 @@ android {
     buildFeatures {
         compose = true
     }
+    buildToolsVersion = "35.0.0"
 }
 
 dependencies {

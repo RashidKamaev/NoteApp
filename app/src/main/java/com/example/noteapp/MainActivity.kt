@@ -1,24 +1,42 @@
 package com.example.noteapp
 
+import NoteApp
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.noteapp.ui.theme.NoteAppTheme
+import androidx.compose.runtime.*
 
+@Suppress("DEPRECATION")
 class MainActivity : ComponentActivity() {
+    private val notes = mutableStateListOf<Note>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            NoteAppTheme {}
+            NoteApp(notes = notes) {
+                val intent = Intent(this, AddNoteActivity::class.java)
+                startActivityForResult(intent, 1)
+            }
+        }
+    }
+
+    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            val title = data?.getStringExtra("title").orEmpty()
+            val content = data?.getStringExtra("content").orEmpty()
+            val isEditing = data?.getBooleanExtra("isEditing", false) ?: false
+
+            if (isEditing) {
+                val index = notes.indexOfFirst { it.title == title }
+                if (index != -1) {
+                    notes[index] = Note(title, content)
+                }
+            } else {
+                notes.add(Note(title, content))
+            }
         }
     }
 }
