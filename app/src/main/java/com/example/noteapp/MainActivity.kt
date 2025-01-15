@@ -1,11 +1,12 @@
 package com.example.noteapp
 
-import NoteApp
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.*
+import com.example.noteapp.data.Note
+import com.example.noteapp.ui.theme.NoteAppTheme
 
 @Suppress("DEPRECATION")
 class MainActivity : ComponentActivity() {
@@ -15,8 +16,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             NoteApp(notes = notes) {
-                val intent = Intent(this, AddNoteActivity::class.java)
-                startActivityForResult(intent, 1)
             }
         }
     }
